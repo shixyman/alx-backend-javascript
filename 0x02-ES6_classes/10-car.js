@@ -1,14 +1,39 @@
-import Car from "./10-car.js";
+export default class Car {
+  constructor(brand, motor, color) {
+    this.brand = brand;
+    this.motor = motor;
+    this.color = color;
+  }
 
-class TestCar extends Car {}
+  get brand() {
+    return this._brand;
+  }
 
-const tc1 = new TestCar("Nissan", "Turbo", "Pink");
-const tc2 = tc1.cloneCar();
+  set brand(brand) {
+    this._brand = brand;
+  }
 
-console.log(tc1);
-console.log(tc1 instanceof TestCar);
+  get motor() {
+    return this._motor;
+  }
 
-console.log(tc2);
-console.log(tc2 instanceof TestCar);
+  set motor(motor) {
+    this._motor = motor;
+  }
 
-console.log(tc1 == tc2);
+  get color() {
+    return this._color;
+  }
+
+  set color(color) {
+    this._color = color;
+  }
+
+  static get [Symbol.species]() {
+    return this;
+  }
+
+  cloneCar() {
+    return new this.constructor[Symbol.species]();
+}
+}

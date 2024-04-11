@@ -1,39 +1,16 @@
-export default class Car {
-  constructor(brand, motor, color) {
-    this.brand = brand;
-    this.motor = motor;
-    this.color = color;
-  }
 
-  get brand() {
-    return this._brand;
-  }
+  import Car from "./10-car.js";
 
-  set brand(brand) {
-    this._brand = brand;
-  }
-
-  get motor() {
-    return this._motor;
-  }
-
-  set motor(motor) {
-    this._motor = motor;
-  }
-
-  get color() {
-    return this._color;
-  }
-
-  set color(color) {
-    this._color = color;
-  }
-
-  static get [Symbol.species]() {
-    return this;
-  }
-
-  cloneCar() {
-      return new this.constructor[Symbol.species]();
-    }
-  }
+  class TestCar extends Car {}
+  
+  const tc1 = new TestCar("Nissan", "Turbo", "Pink");
+  const tc2 = tc1.cloneCar();
+  
+  console.log(tc1);
+  console.log(tc1 instanceof TestCar);
+  
+  console.log(tc2);
+  console.log(tc2 instanceof TestCar);
+  
+  console.log(tc1 == tc2);
+  
