@@ -35,5 +35,5 @@ export default class Car {
 
   cloneCar() {
     return new this.constructor[Symbol.species]();
-}
+  }
 }
