@@ -7,4 +7,3 @@ function getListStudentIds(students) {
 }
 
 export default getListStudentIds;
-npm
