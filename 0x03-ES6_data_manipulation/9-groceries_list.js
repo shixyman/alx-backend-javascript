@@ -1,13 +1,11 @@
-const updateUniqueItems = (items) => {
-  if (!(items instanceof Map)) {
-    throw new Error('Cannot process');
-  }
-  for (const [k, v] of items.entries()) {
-    if (v === 1) {
-      items.set(k, 100);
-    }
-  }
-  return items;
+const groceriesList = () => {
+  const map = new Map();
+  map.set('Apples', 10);
+  map.set('Tomatoes', 10);
+  map.set('Pasta', 1);
+  map.set('Rice', 1);
+  map.set('Banana', 5);
+  return map;
 };
 
-export default updateUniqueItems;
+export default groceriesList;
