@@ -1,29 +1,13 @@
-// Define the type RowID
-type RowID = number;
-
-// Define the interface RowElement
-interface RowElement {
-    firstName: string;
-    lastName: string;
-    age?: number;
-}
-// <reference path="./js/crud.d.ts" />
-
 import { RowID, RowElement } from './interface';
-import * as CRUD from './js/crud';
+import * as CRUD from './crud';
 
 const row: RowElement = {
     firstName: 'Guillaume',
     lastName: 'Salva',
-};
+}
 
 const newRowID: RowID = CRUD.insertRow(row);
-
-const updatedRow: RowElement = {
-    ...row,
-    age: 23,
-};
+const updatedRow: RowElement = { age: 23, ...row };
 
 CRUD.updateRow(newRowID, updatedRow);
-
 CRUD.deleteRow(newRowID);
