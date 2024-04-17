@@ -1,15 +1,28 @@
-// Define the printTeacher function
-function printTeacher(firstName: string, lastName: string): string {
-    const firstLetter = firstName.charAt(0).toUpperCase();
-    const formattedLastName = lastName.charAt(0).toUpperCase() + lastName.slice(1);
-    return `${firstLetter}. ${formattedLastName}`;
+// Define the StudentClassConstructor interface for the constructor
+interface StudentClassConstructor {
+    new(firstName: string, lastName: string): StudentClass;
 }
 
-// Define the printTeacherFunction interface
-interface printTeacherFunction {
-    (firstName: string, lastName: string): string;
+// Define the StudentClass interface
+interface StudentClass {
+    workOnHomework(): string;
+    displayName(): string;
 }
 
-// Example usage of the printTeacher function
-const teacherName: string = printTeacher("John", "Doe");
-console.log(teacherName);
+// Implement the StudentClass using the StudentClassConstructor interface
+const StudentClass: StudentClassConstructor = class {
+    constructor(private firstName: string, private lastName: string) { }
+
+    workOnHomework(): string {
+        return 'Currently working';
+    }
+
+    displayName(): string {
+        return this.firstName;
+    }
+};
+
+// Example usage of the StudentClass
+const studentInstance: StudentClass = new StudentClass('John', 'Doe');
+console.log(studentInstance.workOnHomework());
+console.log(studentInstance.displayName());;
