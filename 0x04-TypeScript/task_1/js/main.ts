@@ -1,28 +1,52 @@
-// Define the StudentClassConstructor interface for the constructor
-interface StudentClassConstructor {
-    new(firstName: string, lastName: string): StudentClass;
+// Define the DirectorInterface interface
+interface DirectorInterface {
+    workFromHome(): string;
+    getCoffeeBreak(): string;
+    workDirectorTasks(): string;
 }
 
-// Define the StudentClass interface
-interface StudentClass {
-    workOnHomework(): string;
-    displayName(): string;
+// Define the TeacherInterface interface
+interface TeacherInterface {
+    workFromHome(): string;
+    getCoffeeBreak(): string;
+    workTeacherTasks(): string;
 }
 
-// Implement the StudentClass using the StudentClassConstructor interface
-const StudentClass: StudentClassConstructor = class {
-    constructor(private firstName: string, private lastName: string) { }
-
-    workOnHomework(): string {
-        return 'Currently working';
+// Implement the Director class
+class Director implements DirectorInterface {
+    workFromHome(): string {
+        return 'Working from home';
     }
 
-    displayName(): string {
-        return this.firstName;
+    getCoffeeBreak(): string {
+        return 'Getting a coffee break';
     }
-};
 
-// Example usage of the StudentClass
-const studentInstance: StudentClass = new StudentClass('John', 'Doe');
-console.log(studentInstance.workOnHomework());
-console.log(studentInstance.displayName());;
+    workDirectorTasks(): string {
+        return 'Getting to director tasks';
+    }
+}
+
+// Implement the Teacher class
+class Teacher implements TeacherInterface {
+    workFromHome(): string {
+        return 'Cannot work from home';
+    }
+
+    getCoffeeBreak(): string {
+        return 'Cannot have a break';
+    }
+
+    workTeacherTasks(): string {
+        return 'Getting to work';
+    }
+}
+
+// Define the createEmployee function
+function createEmployee(salary: number | string): Director | Teacher {
+    if (typeof salary === 'number' && salary < 500) {
+        return new Teacher();
+    } else {
+        return new Director();
+    }
+}
