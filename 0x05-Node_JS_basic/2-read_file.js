@@ -4,34 +4,30 @@ const fs = require('fs');
 
 function countStudents(path) {
   try {
-    const data = fs.readFileSync(path, 'utf-8');
+    const data = fs.readFileSync(path, 'utf8');
     const lines = data.trim().split('\n');
-    if (lines.length === 0) {
-      throw new Error('Cannot load the database');
-    }
+    const students = lines.slice(1).filter((line) => line.trim() !== '');
 
-    const fields = {};
-    let totalStudents = 0;
+    const fields = new Set();
+    const studentsPerField = {};
 
-    for (let i = 1; i < lines.length; i++) {
-      if (lines[i].trim() === '') {
-        continue;
-      }
-      const [field, name] = lines[i].split(',');
-      if (!fields[field]) {
-        fields[field] = [name.trim()];
+    for (const line of students) {
+      const [firstName, field] = line.split(',');
+      fields.add(field.trim());
+      if (studentsPerField[field]) {
+        studentsPerField[field.trim()].push(firstName);
       } else {
-        fields[field].push(name.trim());
+        studentsPerField[field.trim()] = [firstName];
       }
-      totalStudents++;
     }
 
-    console.log(`Number of students: ${totalStudents}`);
-    for (const [field, names] of Object.entries(fields)) {
-      console.log(`Number of students in ${field}: ${names.length}. List: ${names.join(', ')}`);
+    console.log(`Number of students: ${students.length}`);
+
+    for (const field of fields) {
+      console.log(`Number of students in ${field}: ${studentsPerField[field].length}. List: ${studentsPerField[field].join(', ')}`);
     }
   } catch (err) {
-    console.error(err.message);
+    console.error('Cannot load the database');
   }
 }
 
