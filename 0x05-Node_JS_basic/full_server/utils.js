@@ -1,30 +1,33 @@
-const fs = require('fs');
+/* eslint-disable comma-dangle */
+/* eslint-disable implicit-arrow-linebreak */
+import { readFile } from 'fs';
 
-function readDatabase(path) {
-  return new Promise((resolve, reject) => {
-    fs.readFile(path, 'utf8', (err, data) => {
+const printStats = (data) => {
+  const dataList = data.split('\n').splice(1);
+  const stats = { CS: [], SWE: [] };
+  for (const line of dataList) {
+    const columns = line.split(',');
+    if (columns[3] === 'CS') {
+      stats.CS.push(columns[0]);
+    } else if (columns[3] === 'SWE') {
+      stats.SWE.push(columns[0]);
+    }
+  }
+  return stats;
+};
+
+const readDatabase = (file) =>
+  new Promise((resolve, reject) => {
+    readFile(file, 'utf-8', (err, data) => {
       if (err) {
-        reject(Error(err));
-        return;
-      }
-      const content = data.toString().split('\n');
-
-      let students = content.filter((item) => item);
-
-      students = students.map((item) => item.split(','));
-
-      const fields = {};
-      for (const i in students) {
-        if (i !== 0) {
-          if (!fields[students[i][3]]) fields[students[i][3]] = [];
-
-          fields[students[i][3]].push(students[i][0]);
+        if (err.code === 'ENOENT') {
+          reject(new Error('Cannot load the database'));
         }
+        reject(err);
+      } else {
+        resolve(printStats(data));
       }
-
-      delete fields.field;
-      resolve(fields);
-
     });
   });
-}
+
+export default readDatabase;

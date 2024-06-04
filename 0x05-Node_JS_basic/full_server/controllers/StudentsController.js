@@ -1,43 +1,51 @@
+/* eslint-disable comma-dangle */
 import readDatabase from '../utils';
 
+const dbFile = process.argv[2] === undefined ? '' : process.argv[2];
 class StudentsController {
-  static getAllStudents(request, response, DATABASE) {
-    readDatabase(DATABASE)
-      .then((fields) => {
-        const students = [];
-        let msg;
-
-        students.push('This is the list of our students');
-
-        for (const key of Object.keys(fields)) {
-          msg = `Number of students in ${key}: ${
-            fields[key].length
-          }. List: ${fields[key].join(', ')}`;
-
-          students.push(msg);
+  static getAllStudents(req, res) {
+    readDatabase(dbFile)
+      .then((data) => {
+        res.statusCode = 200;
+        res.write('This is the list of our students\n');
+        for (const [key, value] of Object.entries(data)) {
+          res.write(
+            `Number of students in ${key}: ${value.length}. List: ${value.join(
+              ', '
+            )}`
+          );
+          if (key === 'CS') {
+            res.write('\n');
+          }
         }
-        response.status(200).send(`${students.join('\n')}`);
+        res.end();
       })
-      .catch(() => {
-        response.status(500).send('Cannot load the database');
+      .catch((err) => {
+        res.statusCode = 500;
+        res.end(err.message);
       });
   }
 
-  static getAllStudentsByMajor(request, response, DATABASE) {
-    const { major } = request.params;
-
+  static getAllStudentsByMajor(req, res) {
+    const { major } = req.params;
     if (major !== 'CS' && major !== 'SWE') {
-      response.status(500).send('Major parameter must be CS or SWE');
-    } else {
-      readDatabase(DATABASE)
-        .then((fields) => {
-          const students = fields[major];
-
-          response.status(200).send(`List: ${students.join(', ')}`);
-        })
-        .catch(() => response.status(500).send('Cannot load the database'));
+      res.statusCode = 500;
+      res.end('Major parameter must be CS or SWE');
     }
+    readDatabase(dbFile)
+      .then((data) => {
+        res.statusCode = 200;
+        for (const [key, value] of Object.entries(data)) {
+          if (key === major) {
+            res.end(`List: ${value.join(', ')}`);
+          }
+        }
+      })
+      .catch((err) => {
+        res.statusCode = 500;
+        res.end(err.message);
+      });
   }
 }
 
-module.exports = StudentsController;
+export default StudentsController;
